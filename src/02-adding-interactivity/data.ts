@@ -1,4 +1,12 @@
-export const sculptureList = [{
+export type Sculpture = {
+  name: string;
+  artist: string;
+  description: string;
+  url: string;
+  alt: string;
+};
+
+export const sculptureList: Sculpture[] = [{
   name: 'Homenaje a la Neurocirugía',
   artist: 'Marta Colvin Andrade',
   description: 'Although Colvin is predominantly known for abstract themes that allude to pre-Hispanic symbols, this gigantic sculpture, an homage to neurosurgery, is one of her most recognizable public art pieces.',

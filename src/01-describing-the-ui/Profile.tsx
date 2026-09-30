@@ -137,9 +137,10 @@ function Cup({ guest }: { guest: number }) {
   return <p>Tea cup for guest #{guest}</p>;
 }
 
-function TeaSet() {
+export function TeaSet() {
   return (
     <>
+    <h2>8. Keeping Components Pure</h2>
       <Cup guest={1} />
       <Cup guest={2} />
       <Cup guest={3} />
@@ -170,8 +171,8 @@ export default function Profile() {
       <h2>7. Rendering Lists</h2>
       <ScientistList />
 
-      <h2>8. Keeping Components Pure</h2>
-      <TeaSet />
+      
+      
     </main>
   );
 }
