@@ -90,7 +90,7 @@ function PropsExample() {
 function Item({ name, isPacked }: { name: string; isPacked: boolean }) {
   return (
     <li className="item">
-      {name} {isPacked ? '✅' : '❌'}
+      {name} {isPacked && '✅'}
     </li>
   );
 }
