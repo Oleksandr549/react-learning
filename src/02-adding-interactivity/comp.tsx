@@ -1,32 +1,19 @@
-import { sculptureList } from './data.js';
-
 export default function Gallery() {
-  let index = 0;
-
-  function handleClick() {
-    index = index + 1;
-  }
-
-  let sculpture = sculptureList[index];
   return (
-    <>
-      <button onClick={handleClick}>
-        Next
-      </button>
-      <h2>
-        <i>{sculpture.name} </i>
-        by {sculpture.artist}
-      </h2>
-      <h3>
-        ({index + 1} of {sculptureList.length})
-      </h3>
-      <img
-        src={sculpture.url}
-        alt={sculpture.alt}
-      />
-      <p>
-        {sculpture.description}
-      </p>
-    </>
+    <section>
+      <h1>Inspiring Sculptures</h1>
+      <Image />
+      <Image />
+      <Image />
+    </section>
+  );
+}
+
+function Image() {
+  return (
+    <img
+      src="https://react.dev/images/docs/scientists/ZF6s192.jpg"
+      alt="'Floralis Genérica' by Eduardo Catalano: a gigantic metallic flower sculpture with reflective petals"
+    />
   );
 }
