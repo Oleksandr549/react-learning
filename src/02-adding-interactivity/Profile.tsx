@@ -258,8 +258,38 @@ function ArtistList() {
     </>
   );
 }
+function Lists() {
+  
+  let nextId = 0;
+  const [name, setName] = useState('');
+  const [artists, setArtists] = useState([]);
+  function handleReset() {
+          setName('');
+        
+      }
+  return (
+    <>
+    <h1>Inspiring sculptors:</h1>
+    <input value={name} onChange={e => setName(e.target.value)} />
+    <button onClick={() => {
+      if (name !== ''){
+      setArtists([...artists, {id: nextId++, name: name}]);
+      handleReset();
+      }
+      
+    }}>Add</button>
+    <ul>
+      {artists.map(artist => (
+        <li key={artist.id}>{artist.name}</li>
+      ))}
+    </ul>
+    </>
+
+  );
+}
 
 export default function Profile() {
+
   return (
     <main className="lesson">
       <h1 className="title">Adding Interactivity</h1>
@@ -284,6 +314,8 @@ export default function Profile() {
 
       <h2>7. Updating Arrays in State</h2>
       <ArtistList />
+      <h2>8. Inspiring sculptors:</h2>
+      <Lists />
     </main>
   );
 }
