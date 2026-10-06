@@ -31,7 +31,7 @@ function Toolbar() {
   return (
     <>
       <div className="toolbar" onClick={() => setLog('Clicked on the toolbar')}>
-        <Button onClick={() => setLog('Playing!')}>Play Movie</Button>
+        <Button onClick={() => setLog('Playing!')}>Play</Button>
         <Button onClick={() => setLog('Uploading!')}>Upload Image</Button>
       </div>
       <form onSubmit={handleSubmit}>
