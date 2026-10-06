@@ -259,32 +259,35 @@ function ArtistList() {
   );
 }
 function Lists() {
-  
-  let nextId = 0;
   const [name, setName] = useState('');
-  const [artists, setArtists] = useState([]);
+  const [nextId, setNextId] = useState(0);
+  const [artists, setArtists] = useState<{ id: number; name: string }[]>([]);
+
   function handleReset() {
-          setName('');
-        
-      }
+    setName('');
+  }
+
   return (
     <>
-    <h1>Inspiring sculptors:</h1>
-    <input value={name} onChange={e => setName(e.target.value)} />
-    <button onClick={() => {
-      if (name !== ''){
-      setArtists([...artists, {id: nextId++, name: name}]);
-      handleReset();
-      }
-      
-    }}>Add</button>
-    <ul>
-      {artists.map(artist => (
-        <li key={artist.id}>{artist.name}</li>
-      ))}
-    </ul>
-    </>
+      <h1>Inspiring sculptors:</h1>
+      <input value={name} onChange={(e) => setName(e.target.value)} />
+      <button
+        onClick={() => {
+          if (!name.trim()) return;
 
+          setArtists((currentArtists) => [...currentArtists, { id: nextId, name }]);
+          setNextId((currentId) => currentId + 1);
+          handleReset();
+        }}
+      >
+        Add
+      </button>
+      <ul>
+        {artists.map((artist) => (
+          <li key={artist.id}>{artist.name}</li>
+        ))}
+      </ul>
+    </>
   );
 }
 
