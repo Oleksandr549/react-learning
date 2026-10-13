@@ -1,33 +1,55 @@
-import {useState} from 'react';
+import { useState, useReducer } from 'react';
 
 type Task = {
     id: string;
     text: string;
     done: boolean;
 };
+type Filter = 'all' | 'active' | 'done';
+type Action =
+  | { type: 'added'; id: string; text: string }
+  | { type: 'toggled'; id: string }
+  | { type: 'deleted'; id: string }
+  | { type: 'clearedDone' };
+function tasksReducer(tasks: Task[], action: Action): Task[] {
+  switch (action.type) {
+    case 'added':
+      return [...tasks, { id: action.id, text: action.text, done: false }];
+    case 'toggled':
+      return tasks.map(t => t.id === action.id ? { ...t, done: !t.done } : t);
+    case 'deleted':
+      return tasks.filter(t => t.id !== action.id);
+    case 'clearedDone':
+      return tasks.filter(t => !t.done);
+  }
+}
 export default function ToDoApp() {
-    const [tasks, setTasks] = useState<Task[]>([]);
+    const [tasks, dispatch] = useReducer(tasksReducer, []);
     const [text, setText] = useState('');
+    const [filter, setFilter] = useState<Filter>('all');
 
  function handleAdd(e: React.FormEvent) {
-    e.preventDefault();
-    if (text.trim() === '') return;
-    const newTask: Task = {
-        id: crypto.randomUUID(),
-        text: text.trim(),
-        done: false,
-    };
-    setTasks([...tasks, newTask]);
-    setText('');
- }
+  e.preventDefault();
+  if (text.trim() === '') return;
+  dispatch({ type: 'added', id: crypto.randomUUID(), text: text.trim() });
+  setText('');
+}
 
-  function handleToggle(id: string) {
-    setTasks(tasks.map(t => t.id === id ? {...t, done: !t.done} : t));
-  }
+function handleToggle(id: string) {
+  dispatch({ type: 'toggled', id });
+}
 
-  function handleDelete(id: string) {
-    setTasks(tasks.filter(t => t.id !== id));
-  }
+function handleDelete(id: string) {
+  dispatch({ type: 'deleted', id });
+}
+const visibleTasks = tasks.filter(t => {
+  if (filter === 'active') return !t.done;
+  if (filter === 'done') return t.done;
+  return true;
+});
+
+const activeCount = tasks.filter(t => !t.done).length;
+
 
   return (
     <div>
@@ -39,9 +61,21 @@ export default function ToDoApp() {
         onChange={(e) => setText(e.target.value)}
       />
       <button type="submit">Add</button>
+    
     </form>
+      <div>
+  {(['all', 'active', 'done'] as Filter[]).map(f => (
+    <button
+      key={f}
+      onClick={() => setFilter(f)}
+      disabled={filter === f}
+    >
+      {f}
+    </button>
+  ))}
+</div>
         <ul>
-            {tasks.map(t => (
+            {visibleTasks.map(t => (
                 <li key={t.id}>
                     <input
                         type="checkbox"
@@ -55,6 +89,7 @@ export default function ToDoApp() {
                 </li>
             ))}
         </ul>
+        <p>{activeCount} active tasks</p>
     </div>
   );
 }
