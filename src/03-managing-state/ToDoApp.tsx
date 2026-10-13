@@ -1,4 +1,4 @@
-import { useState, useReducer } from 'react';
+import { useState, useReducer, useEffect } from 'react';
 
 type Task = {
     id: string;
@@ -23,11 +23,25 @@ function tasksReducer(tasks: Task[], action: Action): Task[] {
       return tasks.filter(t => !t.done);
   }
 }
+
+const STORAGE_KEY = 'todo-tasks';
+
+function loadTasks(): Task[] {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+}
 export default function ToDoApp() {
-    const [tasks, dispatch] = useReducer(tasksReducer, []);
+    
+    const [tasks, dispatch] = useReducer(tasksReducer, [], loadTasks);
     const [text, setText] = useState('');
     const [filter, setFilter] = useState<Filter>('all');
-
+useEffect(() => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}, [tasks]);
  function handleAdd(e: React.FormEvent) {
   e.preventDefault();
   if (text.trim() === '') return;
@@ -38,7 +52,9 @@ export default function ToDoApp() {
 function handleToggle(id: string) {
   dispatch({ type: 'toggled', id });
 }
-
+function handleClearDone() {
+  dispatch({ type: 'clearedDone' });
+}
 function handleDelete(id: string) {
   dispatch({ type: 'deleted', id });
 }
@@ -52,6 +68,7 @@ const activeCount = tasks.filter(t => !t.done).length;
 
 
   return (
+    
     <div>
       <h1>Todo</h1>
     <form onSubmit={handleAdd}>
@@ -73,6 +90,7 @@ const activeCount = tasks.filter(t => !t.done).length;
       {f}
     </button>
   ))}
+   <button onClick={handleClearDone}>Clear Done</button>
 </div>
         <ul>
             {visibleTasks.map(t => (
