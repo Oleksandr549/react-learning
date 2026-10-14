@@ -64,7 +64,7 @@ function Gallery() {
   }
 
   return (
-    <div className="gallery">
+    <div className="gallery ">
       <button onClick={handlePrevClick}>Previous</button>
       <button onClick={handleNextClick}>Next</button>
       <h3>
