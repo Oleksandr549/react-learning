@@ -1,36 +1,80 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
+import { flushSync} from 'react-dom';
 
-export default function Stopwatch() {
-  const [startTime, setStartTime] = useState(Date.now());
-  const [now, setNow] = useState(Date.now());
-  const intervalRef = useRef(null);
-
-  function handleStart() {
-
-    clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      setNow(Date.now());
-    }, 10);
-  }
-
-  function handleStop() {
-    clearInterval(intervalRef.current);
-  }
-
-  let secondsPassed = 0;
-  if (startTime != null && now != null) {
-    secondsPassed = (now - startTime) / 1000;
-  }
+export default function CatFriends() {
+  const selectedRef = useRef(null);
+  const [index, setIndex] = useState(0);
 
   return (
     <>
-      <h1>Time passed: {secondsPassed.toFixed(3)}</h1>
-      <button onClick={handleStart}>
-        Start
-      </button>
-      <button onClick={handleStop}>
-        Stop
-      </button>
+      <nav>
+        <button onClick={() => {
+          flushSync(() => {
+            if (index < catList.length - 1) {
+              setIndex(index + 1);
+            } else {
+              setIndex(0);
+            }
+          });
+          selectedRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+          });
+        }}>
+          Next
+        </button>
+      </nav>
+      <div>
+        <ul>
+          {catList.map((cat, i) => (
+            <li
+              key={cat.id}
+              ref={index === i ?
+                selectedRef :
+                null
+              }
+            >
+              <img
+                className={
+                  index === i ?
+                    'active'
+                    : ''
+                }
+                src={cat.imageUrl}
+                alt={'Cat #' + cat.id}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 }
+
+const catCount = 10;
+const catList = new Array(catCount);
+for (let i = 0; i < catCount; i++) {
+  const bucket = Math.floor(Math.random() * catCount) % 2;
+  let imageUrl = '';
+  switch (bucket) {
+    case 0: {
+      imageUrl = "https://placecats.com/neo/250/200";
+      break;
+    }
+    case 1: {
+      imageUrl = "https://placecats.com/millie/250/200";
+      break;
+    }
+    case 2:
+    default: {
+      imageUrl = "https://placecats.com/bella/250/200";
+      break;
+    }
+  }
+  catList[i] = {
+    id: i,
+    imageUrl,
+  };
+}
+
