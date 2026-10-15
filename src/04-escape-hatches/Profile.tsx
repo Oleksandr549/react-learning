@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { flushSync} from 'react-dom';
-import SearchButton from './SearchButton.tsx';
+import SearchButton from './effects.tsx';
 
 export default function CatFriends() {
   const selectedRef = useRef(null);
@@ -28,7 +28,7 @@ export default function CatFriends() {
       </nav>
       <div>
 
-         <SearchButton />
+   
         <ul>
           {catList.map((cat, i) => (
             <li
