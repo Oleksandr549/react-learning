@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import { flushSync} from 'react-dom';
-import SearchButton from './effects.tsx';
 
 export default function CatFriends() {
   const selectedRef = useRef(null);
